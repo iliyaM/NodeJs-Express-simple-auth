@@ -2,6 +2,7 @@ const express = require('express'); // Require express
 const handlebars = require('express-handlebars'); // Render engine
 const bodyParser = require('body-parser'); //Require bodyparser to parse request body
 const path = require('path'); // Static path
+const sessions = require('client-sessions'); //sessuibs library
 const app = express(); // Instantiate express
 
 
@@ -13,6 +14,14 @@ app.set('view engine', 'handlebars');
 //MiddleWare to handle requests
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+
+//SessionMiddleware setting up cookie
+app.use(sessions({
+	cookieName: 'session',
+	secret: 'sdajkfhasjkdfhasikdhfkasjhdfkjasnbdf',
+	duration: 30 * 60 * 1000,
+	activeDuration: 5 * 60 * 1000
+}));
 
 // Call all routes to handle with routes class
 const router = require('./routes/router'); // Routes module
