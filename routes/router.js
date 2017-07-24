@@ -15,9 +15,19 @@ router.get('/', function(req, res) {
 	res.render('index');
 });
 
+//Redirect to dashbopard page 
+router.get('/dashboard', function(req, res) {
+	res.render('dashboard'); 
+});
+
 //Registration get method routing
 router.get('/register', function(req, res) {
 	res.render('register');
+});
+
+//Registration get method routing
+router.get('/login', function(req, res) {
+	res.render('login');
 });
 
 // Registration PostMethod Strore to mongo
@@ -43,10 +53,22 @@ router.post('/register', function(req, res) {
 	})
 });
 
-//Redirect to dashbopard page 
-router.get('/dashboard', function(req, res) {
-	res.render('dashboard.handlebars'); 
+//Post Login 
+router.post('/login', function(req, res){
+	User.findOne({email: req.body.email}, function(err, obj) { //Send serach for one item in User model
+		//return callback function withh err and object. if err null no match
+		if (!obj) {
+			res.render('login', { error: 'Invalid email or password'});
+		} else {
+			if (req.body.password === obj.password) {
+				// res.render('login', { success: 'Success you are beeing redirecrted'});
+				res.redirect('dashboard');
+			} else {
+				res.render('login', { error: 'password is not correct'});
+			}
+		}
+	});
 });
-
+	
 
 module.exports = router;
